@@ -1,7 +1,7 @@
 ## deploy serverless lambda to aws
 ```bash
 cd /path/to/serverless-demo/
-    AWS_ACCESS_KEY_ID=AKIA4E5VPNZ5FLR7ODXU AWS_SECRET_ACCESS_KEY=ulsyZHfX3t5xT7SOdrW5/Fd8JMkwNje4RFkKpFd9 ./.my-tools/devops/deploy-staging.sh
+    AWS_ACCESS_KEY_ID=yourid AWS_SECRET_ACCESS_KEY=yoursecret ./.my-tools/devops/deploy-staging.sh
 cd -
 ```
 
