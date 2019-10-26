@@ -1,4 +1,4 @@
-service: serverless-practice
+service: serverless-practice-namgivu
 
 provider:
   name: aws
@@ -25,6 +25,7 @@ plugins:
 custom:
   api:
     rootPath: 'api'
+
   webpack:
       includeModules:
         forceExclude:
@@ -32,12 +33,13 @@ custom:
 
   staging:
     env:
-      # credential env vars: ELK_API_PASSWORD, DB_PASSWORD, AWS_S3_SECRET, AWS_S3_KEY, MANDRILL_SECRET_KEY
+      # create in .env, credential env vars: ELK_API_PASSWORD, DB_PASSWORD, AWS_S3_SECRET, AWS_S3_KEY, MANDRILL_SECRET_KEY
       # share
       DB_HOST: ${env:DB_HOST, 'mysql.tuanquynet.click'}
       DB_DATABASE: ${env:DB_DATABASE, 'serverless-practice'}
       DB_USER: ${env:DB_USER, 'demo'}
       DB_PASSWORD: ${env:DB_PASSWORD, ''}
+
       # there is problem if we define string with @ ex: my@password
       TZ: ${env:TZ, 'UTC'}
       MEDIA_TTL: '15'
@@ -103,13 +105,18 @@ functions:
     package:
       include:
         - server-info/**
+    events:
+      - http:
+          path: ${self:custom.api.rootPath}/hello-world
+          method: get
+          cors: true
     vpc: ${self:custom.${self:provider.stage}.vpc}
 
   myfunc:
     handler: myfunc/index.handler
     description: 'test policy: cloudwatch, s3, sns, rds'
     timeout: 10
-    role: 'SPCustomRole'
+    #role: 'SPCustomRole'
     package:
       include:
         - myfunc/**
@@ -120,6 +127,7 @@ functions:
           rate: rate(10 minutes)
           enabled: false
     vpc: ${self:custom.${self:provider.stage}.vpc}
+
     environment:
       DB_HOST: ${self:custom.${self:provider.stage}.env.DB_HOST}
       DB_DATABASE: ${self:custom.${self:provider.stage}.env.DB_DATABASE}
@@ -127,4 +135,7 @@ functions:
       DB_PASSWORD: ${self:custom.${self:provider.stage}.env.DB_PASSWORD}
       TZ: ${self:custom.${self:provider.stage}.env.TZ}
       MEDIA_TTL: ${self:custom.${self:provider.stage}.env.MEDIA_TTL}
-      LAMBDA_TEST_SERVER_TIME_ARN: '${self:service}-${opt:stage, self:provider.stage}-server-info'
+
+                                                    #--stage param at .my-tools/devops/deploy-staging.sh, line serverless deploy  --stage staging  #defined in this file
+                                                    #either use this                                                                               #or this
+      LAMBDA_TEST_SERVER_TIME_ARN: '${self:service}-${opt:stage,                                                                                   self:provider.stage}-server-info'
