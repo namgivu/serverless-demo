@@ -24,6 +24,8 @@ plugins:
 custom:
   api:
     rootPath: 'api'
+
+  # required by serverless-webpack - used here to minify our code
   webpack:
       includeModules:
         forceExclude:
@@ -32,14 +34,18 @@ custom:
 
 functions:
   hello-world:
+             #folder     #file.#function_name
     handler: hello-world/index.handler
+
     description: 'hello world'
     timeout: 10
     package:
       include:
         - hello-world/**
+
     events:
       - http:
+                       #the custom: section defined above
           path: ${self:custom.api.rootPath}/hello-world
           method: get
           cors: true
