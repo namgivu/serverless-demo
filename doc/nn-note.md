@@ -54,3 +54,7 @@ lambda Framework name Serverless
     ie a wrapper/simpler-syntax to work with cloud provider 
     ie user has no knowledge about Cloud Formation to work with cloud provider
 
+
+## when should we use serverless
+image thumbnail
+video multi-dimension
